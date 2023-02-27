@@ -11,9 +11,14 @@ use App\Models\Todo;
 
 class TodoController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:api');
+    }
+
     public function index()
     {
-        return TodoCollection::collection(Todo::all());
+        return new TodoCollection(Todo::all());
     }
 
     public function store(StoreTodoRequest $request)
@@ -21,7 +26,7 @@ class TodoController extends Controller
         Todo::create([
             'title' => $request['title'],
             'body' => $request['body'],
-            'user_id' => \PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth::user()->id,
+            'user_id' => auth()->id(),
         ]);
         return response()->json([
             'status' => 'success',
