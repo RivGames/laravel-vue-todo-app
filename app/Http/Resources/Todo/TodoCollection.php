@@ -15,10 +15,9 @@ class TodoCollection extends ResourceCollection
     public function toArray(Request $request): array
     {
         return [
-            'data' => $this->collection,
-            'links' => [
-                'self' => 'link-value',
-            ],
+            'id' => $this->id,
+            'title' => $this->title,
+            'body' => $this->body,
         ];
     }
 }

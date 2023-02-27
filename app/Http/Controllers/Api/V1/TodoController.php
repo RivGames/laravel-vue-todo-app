@@ -8,26 +8,20 @@ use App\Http\Requests\Todo\UpdateTodoRequest;
 use App\Http\Resources\Todo\TodoCollection;
 use App\Http\Resources\Todo\TodoResource;
 use App\Models\Todo;
-use Illuminate\Support\Facades\Auth;
-use PHPOpenSourceSaver\JWTAuth\JWTAuth;
 
 class TodoController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth:api');
-    }
     public function index()
     {
-        return new TodoCollection(Todo::all());
+        return TodoCollection::collection(Todo::all());
     }
 
     public function store(StoreTodoRequest $request)
     {
-         Todo::create([
+        Todo::create([
             'title' => $request['title'],
             'body' => $request['body'],
-            'user_id' => auth()->id(),
+            'user_id' => \PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth::user()->id,
         ]);
         return response()->json([
             'status' => 'success',
