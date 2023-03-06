@@ -1,5 +1,4 @@
 <script setup>
-    import axios from "axios"
 </script>
 <template>
     <div class="h-100 w-full flex items-center justify-center bg-teal-lightest font-sans">
@@ -26,9 +25,3 @@
         </div>
     </div>
 </template>
-
-<script>
-export default {
-    name: "Todo"
-}
-</script>

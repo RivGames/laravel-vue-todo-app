@@ -1,6 +1,7 @@
 <script setup>
-import HelloWorld from "@/components/HelloWorld.vue";
 import Todo from "@/components/Todo.vue";
+import Login from "@/components/Login.vue";
+import Register from "@/components/Register.vue";
 </script>
 
 <template>
@@ -10,7 +11,9 @@ import Todo from "@/components/Todo.vue";
         </div>
     </header>
 
-    <main>
+    <main class="flex gap-4">
+        <Register />
+        <Login />
         <Todo/>
     </main>
 </template>
