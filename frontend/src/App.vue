@@ -2,6 +2,13 @@
 import Todo from "@/components/Todo.vue";
 import Login from "@/components/Login.vue";
 import Register from "@/components/Register.vue";
+import {ref} from 'vue';
+
+const dataFromChild = ref(false);
+
+const handleDataPassed = (data) => {
+    dataFromChild.value = data;
+};
 </script>
 
 <template>
@@ -12,8 +19,12 @@ import Register from "@/components/Register.vue";
     </header>
 
     <main class="flex gap-4">
-        <Register />
-        <Login />
+        <div v-if="!dataFromChild">
+            <p class="font-bold text-xl">Register</p>
+            <Register/>
+            <p class="font-bold text-xl">Login</p>
+            <Login @data-passed="handleDataPassed"/>
+        </div>
         <Todo/>
     </main>
 </template>

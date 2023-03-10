@@ -1,5 +1,4 @@
 <script setup>
-import Error from "@/components/Error.vue";
 import useAuth from "@/composables/useAuth";
 import {reactive} from "vue";
 let form =  reactive({
@@ -7,16 +6,15 @@ let form =  reactive({
     email:'',
     password:'',
 })
-let {register,errors,isLoggedIn} = useAuth();
+let {register,errors} = useAuth();
 </script>
 <template>
-    <div v-if="isLoggedIn" class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+    <div class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
         <form @submit.prevent="register(form)">
             <div class="mb-6">
                 <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your name</label>
                 <input v-model="form.name" type="text" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
             </div>
-<!--            <Error errors="errors" name="name" />-->
             <div v-if="errors.name">
                 <span class="text-sm text-red-400">{{ errors.name[0] }}</span>
             </div>
