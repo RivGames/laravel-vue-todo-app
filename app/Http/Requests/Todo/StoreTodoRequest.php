@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Todo;
 
+use App\TodoCreateDto;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreTodoRequest extends FormRequest
@@ -25,5 +26,10 @@ class StoreTodoRequest extends FormRequest
             'title' => ['required','min:3','max:20'],
             'body' => ['required','min:5','max:255'],
         ];
+    }
+
+    public function getDto(): TodoCreateDto
+    {
+        return new TodoCreateDto($this->get('title'),$this->get('body'),auth()->id());
     }
 }

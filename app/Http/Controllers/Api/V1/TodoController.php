@@ -5,9 +5,9 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Todo\StoreTodoRequest;
 use App\Http\Requests\Todo\UpdateTodoRequest;
-use App\Http\Resources\Todo\TodoCollection;
 use App\Http\Resources\Todo\TodoResource;
 use App\Models\Todo;
+use App\Services\TodoService;
 
 class TodoController extends Controller
 {
@@ -16,18 +16,16 @@ class TodoController extends Controller
         $this->middleware('auth:api');
     }
 
-    public function index()
+    public function index(TodoService $todoService)
     {
-        return new TodoCollection(Todo::all());
+        return response()->json($todoService->index());
     }
 
-    public function store(StoreTodoRequest $request)
+    public function store(StoreTodoRequest $request,TodoService $todoService)
     {
-        Todo::create([
-            'title' => $request['title'],
-            'body' => $request['body'],
-            'user_id' => auth()->id(),
-        ]);
+        if(!$todoService->create($request->getDto())){
+            return response()->json("Something went wrong...");
+        }
         return response()->json([
             'status' => 'success',
             'message' => 'Task successfully created!',
@@ -39,9 +37,11 @@ class TodoController extends Controller
         return new TodoResource($todo);
     }
 
-    public function update(UpdateTodoRequest $request,Todo $todo)
+    public function update(UpdateTodoRequest $request,Todo $todo,TodoService $todoService)
     {
-        $todo->update($request->validated());
+        if(!$todoService->update($request->getDto(),$todo)){
+            return response()->json(['message' => 'Whoops...']);
+        }
         return response()->json(['status' => 'success', 'message' => 'Task successfully updated!']);
     }
     public function destroy(Todo $todo)

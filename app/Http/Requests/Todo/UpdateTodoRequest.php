@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Todo;
 
+use App\TodoUpdateDto;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateTodoRequest extends FormRequest
@@ -25,5 +26,10 @@ class UpdateTodoRequest extends FormRequest
             'title' => ['required','min:3','max:20'],
             'body' => ['required','min:5','max:255'],
         ];
+    }
+
+    public function getDto(): TodoUpdateDto
+    {
+        return new TodoUpdateDto($this->title,$this->body);
     }
 }
