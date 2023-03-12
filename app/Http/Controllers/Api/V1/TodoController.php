@@ -5,48 +5,59 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Todo\StoreTodoRequest;
 use App\Http\Requests\Todo\UpdateTodoRequest;
-use App\Http\Resources\Todo\TodoResource;
-use App\Models\Todo;
 use App\Services\TodoService;
+use Illuminate\Http\JsonResponse;
 
 class TodoController extends Controller
 {
-    public function __construct()
+    private TodoService $todoService;
+    public function __construct(TodoService $todoService)
     {
+        $this->todoService = $todoService;
         $this->middleware('auth:api');
     }
 
-    public function index(TodoService $todoService)
+    /**
+     * @return \App\Http\Resources\Todo\TodoCollection
+     */
+    public function index(): \App\Http\Resources\Todo\TodoCollection
     {
-        return response()->json($todoService->index());
+        return $this->todoService->index();
     }
 
-    public function store(StoreTodoRequest $request,TodoService $todoService)
+    /**
+     * @param StoreTodoRequest $request
+     * @return JsonResponse
+     */
+    public function store(StoreTodoRequest $request): JsonResponse
     {
-        if(!$todoService->create($request->getDto())){
-            return response()->json("Something went wrong...");
-        }
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Task successfully created!',
-        ]);
+        return $this->todoService->create($request->getDto());
     }
 
-    public function show(Todo $todo)
+    /**
+     * @param $id
+     * @return \App\Http\Resources\Todo\TodoResource|JsonResponse
+     */
+    public function show($id): \App\Http\Resources\Todo\TodoResource|JsonResponse
     {
-        return new TodoResource($todo);
+        return $this->todoService->show($id);
     }
 
-    public function update(UpdateTodoRequest $request,Todo $todo,TodoService $todoService)
+    /**
+     * @param UpdateTodoRequest $request
+     * @param $id
+     * @return JsonResponse
+     */
+    public function update(UpdateTodoRequest $request, $id): JsonResponse
     {
-        if(!$todoService->update($request->getDto(),$todo)){
-            return response()->json(['message' => 'Whoops...']);
-        }
-        return response()->json(['status' => 'success', 'message' => 'Task successfully updated!']);
+       return $this->todoService->update($request->getDto(),$id);
     }
-    public function destroy(Todo $todo)
+    /**
+     * @param $id
+     * @return JsonResponse
+     */
+    public function destroy($id): JsonResponse
     {
-        $todo->delete();
-        return response()->json(['status' => 'success','message' => 'Task successfully deleted']);
+        return $this->todoService->delete($id);
     }
 }

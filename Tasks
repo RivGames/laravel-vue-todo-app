@@ -1,0 +1,6 @@
+TODO:
+1./api/V1/todos/{id} (GET) DONE
+2./api/V1/todos/{id} (DELETE) DONE
+3./api/V1/todos/ (GET)
+4./api/V1/todos/ (POST)
+4./api/V1/todos/{todo} (PUT)

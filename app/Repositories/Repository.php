@@ -17,7 +17,7 @@ abstract class Repository implements RepositoryInterface
      */
     public function findById($id)
     {
-        return $this->model->findOrFail($id);
+        return $this->model->find($id);
     }
     /**
      * @return mixed
@@ -32,7 +32,7 @@ abstract class Repository implements RepositoryInterface
      */
     public function delete($id)
     {
-
+        return $this->findById($id)->delete();
     }
 
     /**
